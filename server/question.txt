@@ -1,0 +1,9 @@
+//what is morgan cors slugify node-geocoder nanoid
+learn more about jwt how it works and more
+learn more about hashing
+what is params
+//resetCode me C capital hai 
+hum token ko expires kara sakte hai 7d me to refresh toekn ka kya hi use hai
+what if we do not use refresh token concept
+
+we use geospatial query in search

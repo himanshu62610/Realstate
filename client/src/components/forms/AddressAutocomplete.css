@@ -1,0 +1,13 @@
+.address-autocomplete {
+    position: relative;
+  }
+  
+  .suggestion-dropdown {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .suggestion-dropdown.show {
+    opacity: 1;
+  }
+  

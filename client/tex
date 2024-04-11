@@ -1,0 +1,15 @@
+react hamesa localhost:3000 pe hi chalta hai
+we use bootwatch for materialistic look not using bootstarp
+we use material theme
+react is single page application aur ye bar bar reload nahi hoti ek page se duse page me reloading nahi  hoti isme  
+//slugify remove white spaces in username and username should be in lowercase as we use it in slugs.
+
+ classname form-control container poinetr mb-3 and many more
+
+ axios pe request marte waqt pura endpoint likhna jaise hum thunderclient pe likhte hai nahi to error dega
+
+ addressautocomplete se hum bas india me address fetch kar rahe hai iske bhar nahi hoga kuch
+
+ in my website with concept of refreshtoken if you login for long time you automatically logout 
+
+ in my code i insert comma after every three number
