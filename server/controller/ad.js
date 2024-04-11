@@ -9,13 +9,13 @@ const axios =require("axios");
 
 
 function generateRandomId(length) {
-  const uuid = uuidv4().replace(/-/g, ''); // Remove hyphens from UUID
-  return uuid.substr(0, length); // Get the first 'length' characters from the UUID
+  const uuid = uuidv4().replace(/-/g, ''); 
+  return uuid.substr(0, length); 
 }
 
 async function fetchCityCoordinates(city) {
   try {
-    const osmGeocodingEndpoint = 'https://nominatim.openstreetmap.org/search';
+    const osmGeocodingEndpoint = 'https:
     const osmResponse = await axios.get(osmGeocodingEndpoint, {
       params: {
         q: city,
@@ -23,12 +23,12 @@ async function fetchCityCoordinates(city) {
       },
     });
 
-    // Assuming the first result contains the coordinates
+    
     const firstResult = osmResponse.data[0];
 
-    // Extract latitude and longitude from the OSM response
-    const latitude = firstResult?.lat || 28.6139; // Default to 0 if not available
-    const longitude = firstResult?.lon || 77.2090; // Default to 0 if not available
+    
+    const latitude = firstResult?.lat || 28.6139; 
+    const longitude = firstResult?.lon || 77.2090; 
 
     return { latitude, longitude };
   } catch (error) {
@@ -39,8 +39,8 @@ async function fetchCityCoordinates(city) {
 
 async function fetchAddressCoordinates(address){
   try{
-    //Use OSM geocoding API endpoint here
-  const osmGeocodingEndpoint = 'https://nominatim.openstreetmap.org/search';
+    
+  const osmGeocodingEndpoint = 'https:
   const osmResponse = await axios.get(osmGeocodingEndpoint, {
     params: {
       q: address,
@@ -48,7 +48,7 @@ async function fetchAddressCoordinates(address){
     },
   });
 
-  // Extracting latitude and longitude from the OSM response
+  
   const latitude = osmResponse.data[0]?.lat;
   const longitude = osmResponse.data[0]?.lon;
   
@@ -63,20 +63,20 @@ async function fetchAddressCoordinates(address){
 
 async function fetchCoordinates(address,city){
   try{
-    //Use OSM geocoding API endpoint here
+    
     const coordinates=await fetchAddressCoordinates(address);
     let latitude=coordinates.latitude;
     let longitude=coordinates.longitude;
   
     if (latitude === undefined || longitude === undefined) {
-      // Fetch city coordinates using a separate function or API call
+      
       const cityCoordinates = await fetchCityCoordinates(city);
     
   
-      // Use city coordinates if available, otherwise set latitude and longitude to 0
-     // if (cityCoordinates && cityCoordinates.latitude !== undefined && cityCoordinates.longitude !== undefined) {
+      
+     
   
-      //fetchcitycordinates function agar cordinates define nahi hai to ek default value set kardega
+      
   
         latitude = cityCoordinates.latitude;
         longitude = cityCoordinates.longitude;
@@ -111,7 +111,7 @@ try {
   if (!description) {
     return res.json({ error: "Description is required" });
   }
-  //find coordinates of given address
+  
  
   const coordinates=await fetchAddressCoordinates(address);
 
@@ -120,14 +120,14 @@ try {
 
   console.log(latitude,longitude);
   if (latitude === undefined || longitude === undefined) {
-    // Fetch city coordinates using a separate function or API call
+    
     const cityCoordinates = await fetchCityCoordinates(city);
   
 
-    // Use city coordinates if available, otherwise set latitude and longitude to 0
-   // if (cityCoordinates && cityCoordinates.latitude !== undefined && cityCoordinates.longitude !== undefined) {
+    
+   
 
-    //fetchcitycordinates function agar cordinates define nahi hai to ek default value set kardega
+    
 
       latitude = cityCoordinates.latitude;
       longitude = cityCoordinates.longitude;
@@ -136,13 +136,13 @@ try {
     ...req.body,
     postedBy: req.user._id,
     location: {
-      type: "Point",//use point instead of Point
+      type: "Point",
       coordinates: [longitude, latitude],
     },
     slug: slugify(`${type}-${address}-${price}-${generateRandomId(6)}`),
   }).save();
 
-  // make user role > Seller (from buyer)
+  
   const user = await User.findByIdAndUpdate(
     req.user._id,
     {
@@ -191,7 +191,7 @@ exports.read = async (req, res) => {
       "name username email phone company photo.Location"
     );
 
-    // related
+    
     const related = await Ad.find({
       _id: { $ne: ad._id },
       action: ad.action,
@@ -307,13 +307,13 @@ exports.update = async (req, res) => {
     const { photos, price, type, address, description } = req.body;
 
     const ad = await Ad.findById(req.params._id);
-    //console.log(ad);
+    
     const owner = req.user._id == ad?.postedBy;
 
     if (!owner) {
       return res.json({ error: "Permission denied" });
     } else {
-      // validation
+      
       if (!photos.length) {
         return res.json({ error: "Photos are required" });
       }
@@ -330,21 +330,21 @@ exports.update = async (req, res) => {
         return res.json({ error: "Description is required" });
       }
 
-      //const geo = await config.GOOGLE_GEOCODER.geocode(address);
+      
 
     const coordinates=await fetchAddressCoordinates(address);
   let latitude=coordinates.latitude;
   let longitude=coordinates.longitude;
 
   if (latitude === undefined || longitude === undefined) {
-    // Fetch city coordinates using a separate function or API call
+    
     const cityCoordinates = await fetchCityCoordinates('New Delhi');
 
       latitude = cityCoordinates.latitude;
       longitude = cityCoordinates.longitude;
   }
 
-      // Use findOneAndUpdate to update a single document
+      
       await Ad.findOneAndUpdate(
         { _id: req.params._id, postedBy: req.user._id },
         {
@@ -438,7 +438,7 @@ exports.adsForRent = async (req, res) => {
 
 exports.search = async (req, res) => {
   try {
-    //console.log("req query", req.query);
+    
     const { action, address, type, priceRange } = req.query;
 
     
@@ -448,7 +448,7 @@ exports.search = async (req, res) => {
   let longitude=coordinates.longitude;
 
   if (latitude === undefined || longitude === undefined) {
-    // Fetch city coordinates using a separate function or API call
+    
     const cityCoordinates = await fetchCityCoordinates('New Delhi');
 
       latitude = cityCoordinates.latitude;
@@ -464,11 +464,11 @@ exports.search = async (req, res) => {
         $gte: parseInt(priceRange[0]),
         $lte: parseInt(priceRange[1]),
       },
-      //geospatial query
+      
 
        location: {
          $near: {
-           $maxDistance: 500000, // 1000m = 1km
+           $maxDistance: 500000, 
            $geometry: {
              type: "point",
              coordinates: [longitude,latitude],
@@ -483,7 +483,7 @@ exports.search = async (req, res) => {
       );
 
       if (ads.length === 0) {
-        // If no matching records found
+        
         console.log('hello world');
         return res.status(204).json({ message: 'No content' });
       }
@@ -491,7 +491,7 @@ exports.search = async (req, res) => {
      console.log("hello");
     res.json(ads);
   } catch (err) {
-    console.error(err); // Log the error message or stack trace
+    console.error(err); 
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };

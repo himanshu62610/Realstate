@@ -16,23 +16,23 @@ res.json({
 }
 
 function generateRandomId(length) {
-  const uuid = uuidv4().replace(/-/g, ''); // Remove hyphens from UUID
-  return uuid.substr(0, length); // Get the first 'length' characters from the UUID
+  const uuid = uuidv4().replace(/-/g, ''); 
+  return uuid.substr(0, length); 
 }
 
 
  const tokenAndUserResponse = (req, res, user) => {
 
   const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-    //expiresIn:10s if want to see the effect 10s baad token change ho jayenga refresh token ke concept se
+    
     expiresIn: "7h",
   });
-  //whaht if we do not use refersh token concept
+  
   const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
     expiresIn: "7d",
   });
-  //yaha user.password=undefined se humne user model me password aur resetcode ko hide kar diya hai
-  //isse ab hum agar user model ko print karnege  to usme password aur resetcode show nahi hoga
+  
+  
   user.password = undefined;
   user.resetCode = undefined;
   return res.json({
@@ -44,17 +44,17 @@ function generateRandomId(length) {
 
 
 exports. preRegister = async (req, res) => {
-      // create jwt with email and password then send email as clickable link
-      // only when user click on that email link, then data saves and registeration completes
+      
+      
 
       try {
 
-        //data fetch
+        
         const { name,email, password } = req.body;
 
 
-        //here we use email-validator .we can alos use express-validator
-        //validation
+        
+        
         if (!validator.validate(email)) {
           return res.json({ error: "A valid email is required" });
         }
@@ -65,10 +65,10 @@ exports. preRegister = async (req, res) => {
           return res.json({ error: "Password should be at least 6 characters" });
         }
 
-        //for unique email 
+        
 
-        //email unique hona agar email database me save hai to firse use nahi kar sakte .email alag chahiye nahi to register wala part work nahi karenga
-        //database se email delete kar dena agar ek hi email use karna hai to
+        
+        
 
         const user = await User.findOne({ email });
         if (user) {
@@ -98,20 +98,20 @@ exports. preRegister = async (req, res) => {
 exports.register = async (req, res) => {
   try {
 
-    //sabe phle pre-register karenge uske baad email verifciation hoga
-    // email me link hogi jisme token hai 
+    
+    
 
 
-     //username aur email har baar unique hona chahiye post request me
-    //preregister me har bar unique email use karna same email me  token har bar same aayenga 
-    //same token(same email) pe do baar post request nahi mar sakte 
-    //console.log(req.body.token);
+     
+    
+    
+    
     const {email, password } = jwt.verify(req.body.token, process.env.JWT_SECRET);
     const hashedPassword = await hashPassword(password);
 
     const user = await new User({
-      //humne email aur password validation nahi lagayi hai abhi wo hum preregister me lagayenge
-     //nanoid is used to create unique random id
+      
+     
 
       username:generateRandomId(6),
       email,
@@ -130,24 +130,24 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
 
-    //data fetch
+    
     const { email, password } = req.body;
 
-    //data validation
+    
     if(!email||!password){
       return
     }
-    // 1 find user by email
+    
     const user = await User.findOne({ email });
     if(!user){
       return res.json({ error: "Invalid email and password" });
     }
-    // 2 compare password
+    
     const match = await comparePassword(password, user.password);
     if (!match) {
       return res.json({ error: "Invalid email and password" });
     }
-    // 3 create jwt tokens  login and signup me userid se hi token banaya hai and send response
+    
 
    tokenAndUserResponse(req, res, user);
 
@@ -171,7 +171,7 @@ exports.forgotPassword = async (req, res) => {
       user.resetCode = resetCode;
       user.save();
 
-      //resetCode me C capital hai 
+      
       const token = jwt.sign({ resetCode }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
@@ -193,16 +193,16 @@ exports.forgotPassword = async (req, res) => {
 
 exports.accessAccount = async (req, res) => {
   try {
-    //resetcode key hai jwttoken me isliye sedha use check kar rahe hai
-    //resetcode ke value ko "" set kar diya taki link ek bar ke liye hi applicable ho
-
-    //ek token ek bar ke liye hi valid hai uske badd resetcode ko"""kar diya hai isliye phirse forgotpassword pe click kare phle
-    //waha se token milemga ussse bad account access kare
-    //access-account me post request marne par resetcode ki value kya hai wo dekhna hai
+    
+    
 
     
-    //resetCode me C capital hai 
-    //resetCode me C capital hai 
+    
+    
+
+    
+    
+    
     const { resetCode } = jwt.verify(req.body.resetCode,process.env.JWT_SECRET);
     console.log(resetCode);
     const user = await User.findOneAndUpdate(
@@ -210,10 +210,10 @@ exports.accessAccount = async (req, res) => {
       { resetCode: "" },
       { new: true, upsert: false }
     );
-    //token sever verify kar leta hai
-    //yaha par hum new token aur new refreshtoken banayenge security enahnce karne ke liye
-    //yaha par hum user ko phir se login karne ke force karenge new  token se
-    //expiry time ko phir se refresh kar rahe hai hum isse
+    
+    
+    
+    
 
     tokenAndUserResponse(req, res, user);
 
@@ -238,10 +238,10 @@ exports.refreshToken = async (req, res) => {
 
 exports.currentUser = async (req, res) => {
   try {
-   //signin karne ke liye register karne ke baad jo token milenga wo use karna hai
+   
 
-   // req.user._id direct use kar sakte hai agar humne middleware use kar sakte hai
-   //req.user._id basically wo user ki _id represent kar raha hai bcoz token me key _id thi
+   
+   
 
     const user = await User.findById(req.user._id);
     if(!user){
@@ -258,7 +258,7 @@ exports.currentUser = async (req, res) => {
 
 exports.publicProfile = async (req, res) => {
   try {
-    //for this endpoints is /api/profile/username hai dhyan rakhna :username nahi hai :username or username ka dhyan rakhna axe se
+    
    
     const user = await User.findOne({ username: req.params.username });
     if(!user){
@@ -276,7 +276,7 @@ exports.publicProfile = async (req, res) => {
 exports.updatePassword = async (req, res) => {
   try {
 
-    //middleware use karne ke liye header me authorization me token(jisme key id ho matlab register karne ke baad wala) dena hai 
+    
     
     const { password } = req.body;
 
@@ -300,7 +300,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-   //middleware use karne ke liye header me authorization me token(jisme key id ho matlab register karne ke baad wala) dena hai 
+   
     
     const user = await User.findByIdAndUpdate(req.user._id, req.body, {
       new: true,
@@ -319,7 +319,7 @@ exports.updateProfile = async (req, res) => {
 };
 
 
-// controller
+
 
 exports.agents = async (req, res) => {
   try {
@@ -335,7 +335,7 @@ exports.agents = async (req, res) => {
 exports.agentAdCount = async (req, res) => {
   try {
     const ads = await Ad.find({ postedBy: req.params._id }).select("_id");
-    // console.log("ads count => ", ads);
+    
     res.json(ads);
   } catch (err) {
     console.log(err);

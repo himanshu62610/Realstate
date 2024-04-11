@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-//const MONGODB_URL
+
 const MONGODB_URL=process.env.MONGODB_URL;
 
 const connect = () => {
@@ -14,7 +14,7 @@ const connect = () => {
 		.catch((err) => {
 			console.log(`DB Connection Failed`);
 			console.log(err);
-			process.exit(1);// Forcefully exits the Node.js process with an exit code of 1
+			process.exit(1);
 		});
 };
 module.exports=connect;

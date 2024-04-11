@@ -1,18 +1,18 @@
 const nodemailer=require("nodemailer");
 const jwt=require("jsonwebtoken");
 
-    //replace resetcode with password;
+    
     exports.sendMail = (email,emailSubject, content) => {
       var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.MAIL_USER, // Replace with your Gmail email
-          pass: process.env.MAIL_PASS// Replace with your Gmail app password
+          user: process.env.MAIL_USER, 
+          pass: process.env.MAIL_PASS
         }
       });
     
       const mailOptions = {
-        from: 'himanshusharma62610@gmail.com', // Replace with your Gmail email
+        from: 'himanshusharma62610@gmail.com', 
         to: email,
         subject: `${emailSubject}`,
         html:` 
@@ -31,10 +31,10 @@ const jwt=require("jsonwebtoken");
       transporter.sendMail(mailOptions, function(error, info) {
         if (error) {
           console.log(error);
-          // Handle the error as needed
+          
         } else {
           console.log('Email sent: ' + info.response);
-          // Handle the success response as needed
+          
         }
       });
     };

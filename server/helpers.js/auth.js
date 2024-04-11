@@ -16,14 +16,14 @@ const bcrypt= require("bcrypt");
   });
 };
 */
-//salt pepper way to hasing
 
-//
+
+
 exports.hashPassword=async function(password){
     try{
-      //yaha 10 salt ki value hai;
-        const hashpass=await bcrypt.hash(password,10);//10ko bhi pass kaRNA HAI
-        //AWAIT CALL MARNA HAI
+      
+        const hashpass=await bcrypt.hash(password,10);
+        
         return hashpass;
     }
     catch(error){

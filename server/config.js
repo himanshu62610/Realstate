@@ -15,4 +15,4 @@ const awsConfig={
 export const AWSSES=new SES(awsConfig);*/
 
 export const JWT_SECRET="IUEHOIJ439RP3402RJ9320P023";
-export const CLIENT_URL="http://localhost:3000";
+export const CLIENT_URL="http:
